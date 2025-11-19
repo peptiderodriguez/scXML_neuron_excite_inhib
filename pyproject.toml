@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scXML_neuron_excite_inhib"
+version = "1.0.0"
+description = "Automated pipeline for Leica LMD7 laser microdissection with spatial optimization"
+readme = "single_cell_pipeline_readme.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+keywords = ["cell-sorting", "facs", "tsp", "optimization", "bioinformatics"]
+authors = [
+    {name = "DVP Team"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "numpy>=1.20.0"
+]
+
+[project.scripts]
+scXML_neuron_excite_inhib = "scXML_neuron_excite_inhib.cli:main"
+
+[tool.setuptools]
+packages = ["scXML_neuron_excite_inhib"]
