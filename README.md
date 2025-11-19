@@ -14,13 +14,13 @@ Automated pipeline for processing BIAS XML files for Leica LMD7 laser microdisse
 
 ## Pipeline Components
 
-### 1. Shape Reduction (`batch_reduce.py`, `batch_reduce_SR.py`)
+### 1. Shape Reduction
 **Purpose:** Reduce XML shape complexity using Ramer-Douglas-Peucker algorithm
 
 **Features:**
 - Reduces point count by ~95% (epsilon=60)
 - Preserves shape geometry
-- Maintains CapID annotations if present
+- CapID annotations: Optional preservation available, but **not needed for standard pipeline** (well assignment replaces them)
 
 **Usage:**
 ```bash
@@ -65,14 +65,14 @@ python3 serpentine_well_assign_SR.py
 
 ## Output Files
 
-### XML Files (for cell sorter)
+### XML Files (for Leica LMD7)
 - `scNeuron_combined_wellassigned.xml` - 207 cells (all cells), 24 blanks
 - `scNeuronSR_combined_wellassigned.xml` - 205 cells (size-restricted), 26 blanks
 
 **Contains:**
 - Reduced shape coordinates (95% fewer points)
-- CapID well assignments (e.g., "B2", "D4", "F6")
-- Combined inhib + excite cells in optimized order
+- Well position annotations as CapID tags (e.g., "B2", "D4", "F6") - these are the collection targets
+- Combined inhib + excite cells in TSP-optimized order
 
 ### CSV Tracking Files
 - `well_assignments_tracking.csv` (all cells)
@@ -194,6 +194,25 @@ QUADRANT_SIZE = 77        # Wells per quadrant
 **Change blank distribution:**
 - Modify `RANDOM_SEED` for different random positions
 - Set `NUM_BLANKS` manually instead of auto-calculation
+
+---
+
+## Technical Notes
+
+### About CapID Annotations
+BIAS XML files can contain optional "CapID" annotations (identifiers for shapes).
+
+**For the standard Leica LMD7 workflow:**
+- CapID preservation is **not needed** and is disabled by default
+- The well assignment step **replaces** any existing CapIDs with well positions (B2, D4, etc.)
+- The tracking CSV provides all necessary metadata (cell type, position, order)
+
+**When you might use CapID preservation:**
+- Using shape reduction independently (without well assignment)
+- Need to maintain original cell identifiers through reduction only
+- Enable with `preserve_cap=True` parameter in reduction functions
+
+**Bottom line:** For the complete pipeline (reduce → assign), CapID preservation is irrelevant since well positions become the new identifiers.
 
 ---
 
